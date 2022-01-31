@@ -441,11 +441,10 @@ class MerchantShopeeShop(models.Model):
                                 order_lines = order['item_list']
                                 sale_order_line = []
                                 for line in order_lines:
-                                    product_tmpl_id = self.env['product.template'].search(['|', ('default_code', '=', line['item_sku']), ('name', '=', line['item_name'])])
-                                    if not product_tmpl_id:
-                                        raise ValidationError(_("Product is not found by SKU '%s' or Name '%s'" % (line['item_sku'], line['item_name'])))
+                                    product_product = self.env['product.product'].search(['|', '|', ('default_code', '=', line['model_sku']), ('default_code', '=', line['item_sku']), ('name', '=', line['item_name'])])
+                                    if not product_product:
+                                        raise ValidationError(_("Product is not found by SKU '%s' or Name '%s'" % (line['item_sku'] if line['item_sku'] else line['model_sku'], line['item_name'])))
 
-                                    product_product = self.env['product.product'].search([('product_tmpl_id', '=', product_tmpl_id[0].id)])
                                     sale_order_line.append((0, 0 ,{
                                         'product_id': product_product.id,
                                         'product_uom_qty': float(line['model_quantity_purchased']),
