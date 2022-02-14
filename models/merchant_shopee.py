@@ -497,7 +497,7 @@ class MerchantShopeeShop(models.Model):
                                     'sale_number': create_sale_order.name,
                                     'shopee_order_id': create_sale_order.sp_order_sn,
                                     'order_lines': [{
-                                        'sku': ol['item_sku'],
+                                        'sku': ol['item_sku'] if ol['item_sku'] else ol['model_sku'],
                                         'name': ol['item_name'],
                                         'quantity': ol['model_quantity_purchased'],
                                         'price': ol['model_original_price']
